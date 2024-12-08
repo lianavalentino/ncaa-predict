@@ -1,0 +1,41 @@
+name: Deploy to Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Build and Deploy to Cloud Run
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Google Cloud SDK
+      uses: google-github-actions/setup-gcloud@v1
+      with:
+        version: '424.0.0'
+        service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}
+        project_id: ncaambb-443717
+
+    - name: Configure Docker authentication
+      run: gcloud auth configure-docker
+
+    - name: Build and push Docker image
+      run: |
+        IMAGE_NAME="gcr.io/ncaambb-443717/ncaambb-app"
+        docker build -t $IMAGE_NAME .
+        docker push $IMAGE_NAME
+
+    - name: Deploy to Cloud Run
+      run: |
+        IMAGE_NAME="gcr.io/ncaambb-443717/ncaambb-app"
+        gcloud run deploy ncaambb-app \
+          --image $IMAGE_NAME \
+          --platform managed \
+          --region us-central1 \
+          --allow-unauthenticated \
+          --service-account cloud-run-sa@ncaambb-443717.iam.gserviceaccount.com
