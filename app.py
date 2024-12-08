@@ -20,7 +20,7 @@ def predict():
     query = f"""
     SELECT
       predicted_label,
-      probabilities
+      predicted_label_probs
     FROM ML.PREDICT(MODEL `bracketology.ncaa_model_updated`,
       (
     SELECT
