@@ -19,7 +19,6 @@ def predict():
     client = bigquery.Client()
     query = f"""
     SELECT
-      predicted_label,
       predicted_label_probs
     FROM ML.PREDICT(MODEL `bracketology.ncaa_model_updated`,
       (
