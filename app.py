@@ -10,7 +10,7 @@ TEAM_STATS_TABLE = f"{PROJECT_ID}.{DATASET_ID}.four_factors"
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    data = request.json
+    data = request.get_json()
     season = data['season']
     team1 = data['team1']
     team2 = data['team2']
