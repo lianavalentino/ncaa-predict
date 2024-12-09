@@ -22,7 +22,7 @@ jobs:
         project_id: ncaambb-443717
 
     - name: Configure Docker authentication
-      run: gcloud auth configure-docker
+      run: gcloud auth configure-docker us-west1-docker.pkg.dev
 
     - name: Build and push Docker image
       run: |
@@ -36,6 +36,6 @@ jobs:
         gcloud run deploy ncaambb-app \
           --image $IMAGE_NAME \
           --platform managed \
-          --region us-central1 \
+          --region us-west1 \
           --allow-unauthenticated \
           --service-account cloud-run-sa@ncaambb-443717.iam.gserviceaccount.com
