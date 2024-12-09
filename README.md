@@ -20,7 +20,8 @@ This application predicts the winner of NCAA basketball games based on historica
        "team2": "Michigan"
      }
      ```
-3. Test using ```curl -X POST      -H "Content-Type: application/json"      -d '{"season": 2015,"team1": "Kentucky","team2": "Alabama"}'        https://ncaa-predict-812516142786.us-west1.run.app/predict```
+3. Test using
+   ```curl -X POST      -H "Content-Type: application/json"      -d '{"season": 2015,"team1": "Kentucky","team2": "Alabama"}'        https://ncaa-predict-812516142786.us-west1.run.app/predict```
 
 ## Project Structure
 - `app.py`: Flask app serving the API.
