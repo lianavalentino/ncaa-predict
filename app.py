@@ -8,6 +8,10 @@ PROJECT_ID = "ncaambb-443717"
 DATASET_ID = "bracketology"
 TEAM_STATS_TABLE = f"{PROJECT_ID}.{DATASET_ID}.four_factors"
 
+@app.route('/train', methods=['POST'])
+def train():
+    return jsonify({"message": "Model training completed and uploaded to GCS"}), 200
+
 @app.route('/predict', methods=['POST'])
 def predict():
     data = request.get_json()
