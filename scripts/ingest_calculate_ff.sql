@@ -1,4 +1,4 @@
-CREATE OR REPLACE TABLE `march_madness.tournament_games_data` AS
+CREATE OR REPLACE TABLE `march_madness.games_ff` AS
   (
 SELECT 
   -- Original fields
