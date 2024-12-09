@@ -26,13 +26,13 @@ jobs:
 
     - name: Build and push Docker image
       run: |
-        IMAGE_NAME="gcr.io/ncaambb-443717/ncaambb-app"
+        IMAGE_NAME="us-west1-docker.pkg.dev/ncaambb-443717/cloud-run-source-deploy/ncaa-predict/ncaa-predict:46df0c71094feb8e7003678e189343351734f37c"
         docker build -t $IMAGE_NAME .
         docker push $IMAGE_NAME
 
     - name: Deploy to Cloud Run
       run: |
-        IMAGE_NAME="gcr.io/ncaambb-443717/ncaambb-app"
+        IMAGE_NAME="us-west1-docker.pkg.dev/ncaambb-443717/cloud-run-source-deploy/ncaa-predict/ncaa-predict:46df0c71094feb8e7003678e189343351734f37c"
         gcloud run deploy ncaambb-app \
           --image $IMAGE_NAME \
           --platform managed \
