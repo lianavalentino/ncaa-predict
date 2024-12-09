@@ -5,12 +5,52 @@ app = Flask(__name__)
 
 # Define project details
 PROJECT_ID = "ncaambb-443717"
-DATASET_ID = "bracketology"
-TEAM_STATS_TABLE = f"{PROJECT_ID}.{DATASET_ID}.four_factors"
+DATASET_ID = "march_madness"
+TEAM_STATS_TABLE = f"{PROJECT_ID}.{DATASET_ID}.teams_data"
 
 @app.route('/train', methods=['POST'])
 def train():
-    return jsonify({"message": "Model training completed and uploaded to GCS"}), 200
+    client = bigquer.Client()
+    query - """
+    CREATE OR REPLACE MODEL
+  `march_madness.model`
+    OPTIONS
+      ( model_type='logistic_reg') AS
+    
+    SELECT
+    
+      team1Win AS label,
+      team1_Wp,
+      team2_Wp
+      #our offensive four factors
+      team1_eFGp,
+      team1_TOVp,
+      team1_ORBp,
+      team1_FTR,
+      #our defensive four factores
+      team1_opp_eFGp,
+      team1_opp_TOVp,
+      team1_opp_ORBp,
+      team1_opp_FTR,
+        #opp offensive four factors
+      team2_eFGp,
+      team2_TOVp,
+      team2_ORBp,
+      team2_FTR,
+    
+      #opp defensive four factores
+      team2_opp_eFGp,
+      team2_opp_TOVp,
+      team2_opp_ORBp,
+      team2_opp_FTR,
+    
+    FROM `march_madness.tournament_games_data`
+    
+    # here we'll train on 2013 - 2033 and predict on 2023
+    WHERE Season BETWEEN 2013 AND 2022 
+
+    """
+    return jsonify({"message": "Model training completed and saved in GCP"}), 200
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -24,23 +64,23 @@ def predict():
     query = f"""
     SELECT
       predicted_label_probs
-    FROM ML.PREDICT(MODEL `bracketology.ncaa_model_updated`,
+    FROM ML.PREDICT(MODEL `march_madness.model`,
       (
     SELECT
     t1.*,
-    t2.team as opponent,
-    t2.eFGp AS opp_eFGp,
-    t2.TOVp AS opp_TOVp,
-    t2.ORBp AS opp_ORBp,
-    t2.FTR AS opp_FTR,
-    t2.def_eFGp AS opp_def_eFGp,
-    t2.def_TOVp AS opp_def_TOVp,
-    t2.def_ORBp AS opp_def_ORBp,
-    t2.def_FTR AS opp_def_FTR,
+    t2.Team as team2,
+    t2.eFGp AS team2_eFGp,
+    t2.TOVp AS team2_TOVp,
+    t2.ORBp AS team2_ORBp,
+    t2.FTR AS team2_FTR,
+    t2.opp_eFGp AS team2_opp_eFGp,
+    t2.opp_TOVp AS team2_opp_TOVp,
+    t2.opp_ORBp AS team2_opp_ORBp,
+    t2.opp_FTR AS team2_opp_FTR,
         FROM `{TEAM_STATS_TABLE}` t1
         JOIN `{TEAM_STATS_TABLE}` t2
-        ON t1.team = '{team1}' AND t2.team = '{team2}' AND t1.season = t2.season
-        WHERE t1.season = {season}
+        ON t1.Team = '{team1}' AND t2.Team = '{team2}' AND t1.Season = t2.Season
+        WHERE t1.Season = {season}
       ))
     """
     query_job = client.query(query)
