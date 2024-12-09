@@ -3,7 +3,7 @@
 This application predicts the winner of NCAA basketball games based on historical data using a logistic regression model deployed in BigQuery ML.
 
 ## Features
-- Predict game outcomes using team stats and historical data.
+- Predict game outcomes using team stats and historical data. Data from https://www.kaggle.com/competitions/march-machine-learning-mania-2024/data
 - Cloud-native application deployed on Google Cloud Platform (GCP).
 - REST API served using Google App Engine.
 
