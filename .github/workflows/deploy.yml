@@ -39,6 +39,11 @@ jobs:
         docker build -t $IMAGE_NAME .
         docker push $IMAGE_NAME
         
+    - name: Github Actions Auth
+      uses: 'google-github-actions/auth@v2'
+      with:
+        credentials_json: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}
+        
     - name: Deploy to Cloud Run
       id: deploy
       uses: google-github-actions/deploy-cloudrun@v2
