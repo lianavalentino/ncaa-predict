@@ -20,9 +20,18 @@ jobs:
         version: '424.0.0'
         service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}
         project_id: ncaambb-443717
-
+        
+    - name: Docker Auth
+      id: docker-auth
+      uses: 'docker/login-action@v1'
+      with:
+        registry: us-west1-docker.pkg.dev
+        username: _json_key
+        password: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON  }}
+      
     - name: Configure Docker authentication
       run: gcloud auth configure-docker us-west1-docker.pkg.dev
+
 
     - name: Build and push Docker image
       run: |
