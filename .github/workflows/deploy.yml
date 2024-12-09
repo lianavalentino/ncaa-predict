@@ -49,6 +49,7 @@ jobs:
       uses: google-github-actions/deploy-cloudrun@v2
       with:
         service: 'ncaa-predict'
+        region: us-west1
         image: "us-west1-docker.pkg.dev/ncaambb-443717/cloud-run-source-deploy/ncaa-predict/ncaa-predict:46df0c71094feb8e7003678e189343351734f37c"
         
         # NOTE: If using a pre-built image, update the image name here
